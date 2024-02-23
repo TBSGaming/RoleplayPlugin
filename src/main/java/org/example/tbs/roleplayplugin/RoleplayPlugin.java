@@ -22,7 +22,7 @@ public class RoleplayPlugin extends JavaPlugin {
         mysqlConnection = new MySQLConnection(host, database, username, password, mysqlLogger);
 
         if (mysqlConnection.connect()) {
-            // Hier kannst du Datenbankabfragen oder andere Aktionen durchführen
+            getLogger().severe("Datenbank verbunden!");
         } else {
             getLogger().severe("Fehler bei der Verbindung zur Datenbank!");
         }
