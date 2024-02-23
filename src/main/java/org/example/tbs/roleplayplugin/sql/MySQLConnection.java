@@ -1,8 +1,6 @@
 package org.example.tbs.roleplayplugin.sql;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,6 +32,10 @@ public class MySQLConnection {
         }
     }
 
+    public Connection getConnection() {
+        return connection;
+    }
+
     public void disconnect() {
         try {
             if (connection != null && !connection.isClosed()) {
@@ -44,28 +46,5 @@ public class MySQLConnection {
             logger.log(Level.SEVERE, "Error disconnecting from the database.", e);
         }
     }
-
-    public ResultSet executeQuery(String query) {
-        try {
-            PreparedStatement statement = connection.prepareStatement(query);
-            return statement.executeQuery();
-        } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error executing query.", e);
-            return null;
-        }
-    }
-
-    public int executeUpdate(String query) {
-        try {
-            PreparedStatement statement = connection.prepareStatement(query);
-            return statement.executeUpdate();
-        } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error executing update.", e);
-            return -1;
-        }
-    }
-
-    public Connection getConnection() {
-        return connection;
-    }
 }
+
