@@ -64,4 +64,8 @@ public class MySQLConnection {
             return -1;
         }
     }
+
+    public Connection getConnection() {
+        return connection;
+    }
 }
