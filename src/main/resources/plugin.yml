@@ -1,3 +1,7 @@
 name: RoleplayPlugin
 version: '${project.version}'
 main: org.example.tbs.roleplayplugin.RoleplayPlugin
+commands:
+  createcharacter:
+    aliases:
+      - cr

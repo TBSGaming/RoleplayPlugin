@@ -2,7 +2,7 @@ package org.example.tbs.roleplayplugin;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.PluginManager;
-import org.example.tbs.roleplayplugin.listeners.PlayerJoinListener;
+import org.example.tbs.roleplayplugin.commands.CreateCharacterCommand;
 import org.example.tbs.roleplayplugin.sql.MySQLConnection;
 import org.example.tbs.roleplayplugin.sql.MySQLTableCreator;
 
@@ -28,10 +28,10 @@ public class RoleplayPlugin extends JavaPlugin {
         if (mysqlConnection.connect()) {
             tableCreator = new MySQLTableCreator(mysqlConnection.getConnection(), mysqlLogger);
             tableCreator.createPlayerRegisterTable();
+            tableCreator.createCharacterTable();
 
-            // Register the PlayerJoinListener
-            PluginManager pluginManager = getServer().getPluginManager();
-            pluginManager.registerEvents(new PlayerJoinListener(tableCreator), this);
+            // Register the command executor
+            getCommand("createcharacter").setExecutor(new CreateCharacterCommand(tableCreator));
 
             getLogger().info("Plugin successfully enabled!");
         } else {

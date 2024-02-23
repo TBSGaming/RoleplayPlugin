@@ -62,5 +62,55 @@ public class MySQLTableCreator {
             logger.log(Level.SEVERE, "Error inserting player into 'player_register'", e);
         }
     }
+    public void createCharacterTable() {
+        String createTableQuery = "CREATE TABLE IF NOT EXISTS characters ("
+                + "id INT AUTO_INCREMENT PRIMARY KEY,"
+                + "player_id INT NOT NULL,"
+                + "character_name VARCHAR(255) NOT NULL,"
+                + "FOREIGN KEY (player_id) REFERENCES player_register(id)"
+                + ");";
+
+        try (PreparedStatement statement = connection.prepareStatement(createTableQuery)) {
+            statement.executeUpdate();
+            logger.log(Level.INFO, "Table 'characters' created successfully.");
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Error creating table 'characters'", e);
+        }
+    }
+
+    public void insertCharacter(int playerId, String characterName) {
+        String insertQuery = "INSERT INTO characters (player_id, character_name) VALUES (?, ?);";
+
+        try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
+            statement.setInt(1, playerId);
+            statement.setString(2, characterName);
+            statement.executeUpdate();
+            logger.log(Level.INFO, "Character successfully inserted into 'characters'. Player ID: "
+                    + playerId + ", Character Name: " + characterName);
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Error inserting character into 'characters'", e);
+        }
+    }
+    public int getPlayerIdForUUID(UUID playerUUID) {
+        String selectQuery = "SELECT id FROM player_register WHERE uuid = ?;";
+
+        try (PreparedStatement statement = connection.prepareStatement(selectQuery)) {
+            statement.setString(1, playerUUID.toString());
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getInt("id");
+            } else {
+                // Spieler-ID nicht gefunden
+                logger.log(Level.WARNING, "Player ID not found for UUID: " + playerUUID);
+                return -1; // Du könntest hier auch eine Ausnahme (Exception) werfen oder einen anderen Wert verwenden, um dies zu signalisieren
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Error getting player ID for UUID: " + playerUUID, e);
+            return -1; // Hier könntest du ebenfalls einen anderen Wert verwenden oder eine Ausnahme werfen
+        }
+    }
+
+    // ... andere Methoden
 }
 
